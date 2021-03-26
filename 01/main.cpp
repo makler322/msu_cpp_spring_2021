@@ -9,10 +9,10 @@ void DefaultWorkTest()
     Allocator allocator;
     allocator.makeAllocator(10);
     assert(nullptr != allocator.alloc(5));
-	assert(nullptr != allocator.alloc(5));
+    assert(nullptr != allocator.alloc(5));
     allocator.reset();
     assert(nullptr != allocator.alloc(2));
-	assert(nullptr != allocator.alloc(8));
+    assert(nullptr != allocator.alloc(8));
 }
 
 void LimitAllocTest()
