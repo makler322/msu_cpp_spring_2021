@@ -20,7 +20,7 @@ void LimitAllocTest()
     Allocator allocator;
     allocator.makeAllocator(5);
     assert(nullptr != allocator.alloc(5));
-	assert(nullptr == allocator.alloc(1));
+    assert(nullptr == allocator.alloc(1));
     allocator.reset();
     assert(nullptr == allocator.alloc(6));
 }
