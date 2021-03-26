@@ -14,19 +14,20 @@ void Allocator::makeAllocator(size_t maxSize)
     offset = 0;
     maxOffset = maxSize;
 };
+
 char* Allocator::alloc(size_t size)
 {
     if (size + offset > maxOffset)
     {
-
         return nullptr;
     }
     else
     {
         offset += size;
-        return newMemory+size;
+        return newMemory + offset - size;
     } 
 };
+
 void Allocator::reset()
 {
     offset = 0;
