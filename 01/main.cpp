@@ -126,6 +126,33 @@ void ResetAndAllocBeforThreeAllocatorsTest()
     assert(nullptr != allocator3.alloc(1));
 }
 
+void ThriceAllocatorAndAllocTest()
+{
+    Allocator allocator;
+    assert(nullptr == allocator.alloc(1));
+    allocator.makeAllocator(8);
+    assert(nullptr != allocator.alloc(6));
+    allocator.makeAllocator(4);
+    assert(nullptr != allocator.alloc(3));
+    allocator.makeAllocator(12);
+    assert(nullptr != allocator.alloc(12));
+    assert(nullptr == allocator.alloc(1));
+    allocator.reset();
+    assert(nullptr != allocator.alloc(5));
+    assert(nullptr == allocator.alloc(10));
+}
+
+void ThriceAllocatorTest()
+{
+    Allocator allocator;
+    allocator.makeAllocator(2);
+    allocator.makeAllocator(4);
+    allocator.makeAllocator(6);
+    assert(nullptr != allocator.alloc(6));
+    assert(nullptr == allocator.alloc(1));
+    allocator.reset();
+}
+
 int main()
 {   
     DefaultWorkTest();
@@ -138,7 +165,9 @@ int main()
     ResetBeforAllocatorTest();
     ResetAndAllocBeforAllocatorTest();
     ResetAndAllocBeforThreeAllocatorsTest();
-     
+    ThriceAllocatorAndAllocTest();
+    ThriceAllocatorTest();
+    
     cout << "Success \n";
     return 0;
 }
