@@ -5,7 +5,7 @@
 
 using namespace std;
 
-string SimpleDigitTokenTest(int digit)
+string SimpleDigitTokenTest(uint64_t digit)
 {
     return "Digit: " + to_string(digit);
 }
@@ -25,7 +25,7 @@ string SimpleEndTokenTest()
     return " End";
 }
 
-string SquareDigitTokenTest(int digit)
+string SquareDigitTokenTest(uint64_t digit)
 {
     return to_string(digit*digit);
 }
@@ -76,12 +76,50 @@ void EmptyTest()
     assert(parser.Parser(stringTest) == "Start " " End");
 }
 
+void FullEmptyTest()
+{
+    TokenParser parser;
+    parser.SetDigitTokenCallback(SquareDigitTokenTest);
+    parser.SetStringTokenCallback(LengthStringTokenTest);
+    parser.SetStartCallback(SimpleStartTokenTest);
+    parser.SetEndCallback(SimpleEndTokenTest);
+    string stringTest = "";
+    assert(parser.Parser(stringTest) == "Start " " End");
+}
+
+void SingleCharacterTest()
+{
+    TokenParser parser;
+    parser.SetDigitTokenCallback(SimpleDigitTokenTest);
+    parser.SetStringTokenCallback(SimpleStringTokenTest);
+    parser.SetStartCallback(SimpleStartTokenTest);
+    parser.SetEndCallback(SimpleEndTokenTest);
+    string stringTest = "a 1 b 3";
+    assert(parser.Parser(stringTest) == "Start " "String: a" "Digit: 1" "String: b" "Digit: 3" " End");
+}
+
+void OutOfUint64Test()
+{
+    TokenParser parser;
+    parser.SetDigitTokenCallback(SimpleDigitTokenTest);
+    parser.SetStringTokenCallback(SimpleStringTokenTest);
+    parser.SetStartCallback(SimpleStartTokenTest);
+    parser.SetEndCallback(SimpleEndTokenTest);
+    // 2 ** 64 + 1 = 18446744073709551617 Буду просто забивать максимально большим числом, то есть 18446744073709551615
+    string stringTest = "a 1 b 18446744073709551617";
+    assert(parser.Parser(stringTest) == "Start " "String: a" "Digit: 1" "String: b" "Digit: 18446744073709551615" " End");
+}
+
+
 int main()
 {
     DefaultSimpleWorkTest();
     WithoutHandlersTest();
     SquareDigitAndLengthStringTest();
     EmptyTest();
+    FullEmptyTest();
+    SingleCharacterTest();
+    OutOfUint64Test();
 
     cout << "Success \n";
     return 0;
