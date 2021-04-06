@@ -10,7 +10,7 @@ void TokenParser::SetEndCallback(const function<string ()>& end)
     EndToken = end;
 }
 
-void TokenParser::SetDigitTokenCallback(const function<string (int)>& digit)
+void TokenParser::SetDigitTokenCallback(const function<string (uint64_t)>& digit)
 {
     DigitToken = digit;
 }
@@ -24,7 +24,7 @@ string TokenParser::ConvertToken(const string & token)
 {
     bool flag = true;
     string answer = "";
-    uint i;
+    uint64_t i, my_number;
     for (i = 0; i < token.length(); i++)
     {
         if ((token[i] < '0') || (token[i] > '9'))
@@ -35,13 +35,23 @@ string TokenParser::ConvertToken(const string & token)
     }
     if (flag)
     {   
+        try 
+        {
+            my_number = stoull(token);
+        }
+        catch (...)
+        {
+            my_number = 18446744073709551615U;
+        }
+        
+
         if (DigitToken != nullptr)
         {
-            answer += DigitToken(stoi(token));
+            answer += DigitToken(my_number);
         }
         else
         {
-            answer += to_string(stoi(token)) + " ";
+            answer += to_string(my_number) + " ";
         }
         
     }
@@ -68,7 +78,7 @@ string TokenParser::Parser(const string & text)
         answer += StartToken();
     }
 
-    uint i = 0;
+    uint64_t i = 0;
     while (i < text.length())
     {
         if (text[i] == ' ' || text[i] == '\t' || text[i] == '\n')
