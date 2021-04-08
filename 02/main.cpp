@@ -105,11 +105,31 @@ void OutOfUint64Test()
     parser.SetStringTokenCallback(SimpleStringTokenTest);
     parser.SetStartCallback(SimpleStartTokenTest);
     parser.SetEndCallback(SimpleEndTokenTest);
-    // 2 ** 64 + 1 = 18446744073709551617 Буду просто забивать максимально большим числом, то есть 18446744073709551615
-    string stringTest = "a 1 b 18446744073709551617";
-    assert(parser.Parser(stringTest) == "Start " "String: a" "Digit: 1" "String: b" "Digit: 18446744073709551615" " End");
+    string stringTest = "a 1 b 18446744073709551616 18446744073709551615";
+    assert(parser.Parser(stringTest) == "Start " "String: a" "Digit: 1" "String: b" "String: 18446744073709551616" "Digit: 18446744073709551615" " End");
 }
 
+void OneSymbolTest()
+{
+    TokenParser parser;
+    parser.SetDigitTokenCallback(SimpleDigitTokenTest);
+    parser.SetStringTokenCallback(SimpleStringTokenTest);
+    parser.SetStartCallback(SimpleStartTokenTest);
+    parser.SetEndCallback(SimpleEndTokenTest);
+    string stringTest = "a";
+    assert(parser.Parser(stringTest) == "Start " "String: a" " End");
+}
+
+void OneDigitTest()
+{
+    TokenParser parser;
+    parser.SetDigitTokenCallback(SimpleDigitTokenTest);
+    parser.SetStringTokenCallback(SimpleStringTokenTest);
+    parser.SetStartCallback(SimpleStartTokenTest);
+    parser.SetEndCallback(SimpleEndTokenTest);
+    string stringTest = "1";
+    assert(parser.Parser(stringTest) == "Start " "Digit: 1" " End");
+}
 
 int main()
 {
@@ -120,7 +140,9 @@ int main()
     FullEmptyTest();
     SingleCharacterTest();
     OutOfUint64Test();
-
+    OneSymbolTest();
+    OneDigitTest();
+    
     cout << "Success \n";
     return 0;
 }

@@ -38,21 +38,26 @@ string TokenParser::ConvertToken(const string & token)
         try 
         {
             my_number = stoull(token);
+            if (DigitToken != nullptr)
+            {
+                answer += DigitToken(my_number);
+            }
+            else
+            {
+                answer += to_string(my_number) + " ";
+            }
         }
         catch (...)
         {
-            my_number = 18446744073709551615U;
-        }
-        
-
-        if (DigitToken != nullptr)
-        {
-            answer += DigitToken(my_number);
-        }
-        else
-        {
-            answer += to_string(my_number) + " ";
-        }
+            if (StringToken != nullptr)
+            {
+                answer += StringToken(token);
+            }
+            else
+            {
+                answer += token + " ";
+            }
+        } 
         
     }
     else
