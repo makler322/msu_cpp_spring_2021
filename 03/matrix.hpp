@@ -1,7 +1,7 @@
 #pragma once
 #include <iostream>
 using namespace std;
-	
+
 
 class Matrix
 {
@@ -9,7 +9,7 @@ class Matrix
     {
         private:
             int32_t *data_;
-            size_t rows;
+            size_t rows2;
         public:
             ProxyRow();
             size_t getRows() const;
@@ -21,7 +21,7 @@ class Matrix
     public:
         Matrix(size_t i, size_t j);
         Matrix(const Matrix & matrix);
-        
+
         ProxyRow& operator[](size_t i);
         size_t getRows() const;
         size_t getCols() const;
@@ -32,11 +32,10 @@ class Matrix
         bool operator !=(const Matrix&) const;
         friend ostream& operator <<(ostream&, const Matrix&);
         ~Matrix();
-    
+
 
     private:
         ProxyRow *rows_;
-		size_t cols;
-		
+        size_t cols;
+        size_t rows;
 };
-

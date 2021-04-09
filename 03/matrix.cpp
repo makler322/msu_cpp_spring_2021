@@ -6,6 +6,7 @@ using namespace std;
 
 Matrix::ProxyRow::ProxyRow(size_t size)
 {
+	rows2 = size;
 	data_ = new int32_t [size];
 	for (size_t index = 0; index < size; index++)
 	{
@@ -20,12 +21,12 @@ Matrix::ProxyRow::ProxyRow()
 
 size_t Matrix::ProxyRow::getRows() const
 {
-	return rows;
+	return rows2;
 }
 
 int32_t& Matrix::ProxyRow::operator[](size_t j)
 {
-	if (j < rows)
+	if (j < rows2)
 	{
 		return data_[j];
 	}
@@ -36,19 +37,20 @@ Matrix::ProxyRow::~ProxyRow()
 	delete[] data_;
 }
 
-Matrix::ProxyRow& Matrix::ProxyRow::operator =(Matrix::ProxyRow &array)
+Matrix::ProxyRow& Matrix::ProxyRow::operator =(ProxyRow &array)
 {
 	delete[] data_;
-	data_ = new int32_t [array.rows];
-	for (size_t index = 0; index < array.rows; index++)
+	rows2 = array.getRows();
+	data_ = new int32_t [rows2];
+	for (size_t index = 0; index < rows2; index++)
 	{
-		data_[index] = array.data_[index];
+		data_[index] = array[index];
 	}
 	return *this;
 }
 Matrix::ProxyRow& Matrix::operator[](size_t i)
-{
-	if (i < cols)
+{   
+	if (i < rows)
 	{
 		return rows_[i];
 	}
@@ -59,6 +61,8 @@ Matrix::ProxyRow& Matrix::operator[](size_t i)
 
 Matrix::Matrix(size_t i, size_t j)
 {
+	rows = i;
+	cols = j;
 	rows_ = new ProxyRow[i];
 	for (size_t index = 0; index < i; index++)
 	{
@@ -68,7 +72,7 @@ Matrix::Matrix(size_t i, size_t j)
 }
 
 
-size_t Matrix::getRows() const {return rows_[0].getRows();}
+size_t Matrix::getRows() const {return rows;}
 
 
 size_t Matrix::getCols() const {return cols;}
@@ -77,7 +81,7 @@ size_t Matrix::getCols() const {return cols;}
 
 Matrix& Matrix::operator *=(int a)
 {
-	for (size_t i = 0; i < rows_[0].getRows(); i++)
+	for (size_t i = 0; i < rows; i++)
 	{
 		for(size_t j = 0; j < cols; j++)
 		{
@@ -90,12 +94,12 @@ Matrix& Matrix::operator *=(int a)
 
 Matrix Matrix::operator +(const Matrix& SecondMatrix) const
 {
-	if ((rows_[0].getRows() != SecondMatrix.getRows()) || (cols != SecondMatrix.getCols()))
+	if ((rows != SecondMatrix.getRows()) || (cols != SecondMatrix.getCols()))
 	{
 		throw out_of_range("Input arrays must have same dimensions");
 	}	
-	Matrix ResultMatrix = Matrix(rows_[0].getRows(), cols);
-	for (size_t i = 0; i < rows_[0].getRows(); i++)
+	Matrix ResultMatrix = Matrix(rows, cols);
+	for (size_t i = 0; i < rows; i++)
 	{
 		for(size_t j = 0; j < cols; j++)
 		{
@@ -108,13 +112,13 @@ Matrix Matrix::operator +(const Matrix& SecondMatrix) const
 
 bool Matrix::operator ==(const Matrix& SecondMatrix) const
 {
-	if ((rows_[0].getRows() != SecondMatrix.getRows()) || (cols != SecondMatrix.getCols()))
+	if ((rows != SecondMatrix.getRows()) || (cols != SecondMatrix.getCols()))
 	{
 		return false;
 	}
 	else
 	{
-		for (size_t i = 0; i < rows_[0].getRows(); i++)
+		for (size_t i = 0; i < rows; i++)
 		{
 			for(size_t j = 0; j < cols; j++)
 			{
@@ -133,11 +137,11 @@ Matrix& Matrix::operator =(const Matrix& SecondMatrix)
 {
 	if (this == &SecondMatrix) 
 		return *this;
-	if ((rows_[0].getRows() != SecondMatrix.getRows()) || (cols != SecondMatrix.getCols()))
+	if ((rows != SecondMatrix.getRows()) || (cols != SecondMatrix.getCols()))
 	{
 		throw out_of_range("Input arrays must have same dimensions");
 	}
-	for (unsigned int i = 0; i < rows_[0].getRows(); i++)
+	for (unsigned int i = 0; i < rows; i++)
 	{
 		for(unsigned int j = 0; j < cols; j++)
 		{

@@ -1,5 +1,5 @@
 CC=g++
-FLAGS=-std=c++17 
+FLAGS=-std=c++17 -Wall -Werror -fsanitize=address -Wextra
 
 all: main.o matrix.o
 	$(CC) $(FLAGS) main.o matrix.o -o main
