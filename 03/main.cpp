@@ -41,9 +41,9 @@ void CompareTest()
 
 int main()
 {
-	SimpleTest();
+    SimpleTest();
     CompareTest();
-	cout << "Success!\n";
+    cout << "Success!\n";
 
-	return 0;
+    return 0;
 }
