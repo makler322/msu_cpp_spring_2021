@@ -119,6 +119,38 @@ void OutOfRangeTest()
     assert(my_try);
 }
 
+void MultiplicationNumberTest()
+{
+    const size_t rows = 3;
+    const size_t cols = 4;
+
+    Matrix m(rows, cols);
+    m[1][1] = 1; 
+    m[1][2] = 2;
+    m[1][3] = 3;
+
+    m[0][1] = 4; 
+    m[0][2] = 5;
+    m[0][3] = 6;
+
+    assert(m[1][1] == 1);
+    assert(m[1][2] == 2);
+    assert(m[1][3] == 3);
+
+    m *= 4;
+
+    assert(m[1][1] == 4);
+    assert(m[1][2] == 8);
+    assert(m[1][3] == 12);
+
+    m *= 0;
+
+    assert(m[1][1] == 0);
+    assert(m[1][2] == 0);
+    assert(m[1][3] == 0);
+
+}
+
 int main()
 {
     SimpleTest();
@@ -128,6 +160,7 @@ int main()
     Compare2DifferentMatrixTest();
     GetSizeMatrixTest();
     OutOfRangeTest();
+    MultiplicationNumberTest();
     cout << "Success!\n";
 
     return 0;
