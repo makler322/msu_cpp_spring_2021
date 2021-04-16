@@ -4,13 +4,10 @@
 #include <string.h>
 #include <stdlib.h>
 
-//реализации методов класса
 BigInt :: BigInt(int64_t num)
 {
-    // перевод числа в строку
 
     std::string strNum = to_string(num);
-    // проверка на отрицательность
     if (strNum[0] == '-')
     {
         neg = true;
@@ -18,7 +15,6 @@ BigInt :: BigInt(int64_t num)
     }
     size = strNum.length();
     bigNum = new char [size];
-    // хранение числа в обратном порядке
     for (size_t i = 0; i < size; i++)
     {
         bigNum[i] = strNum[size - 1 - i];
@@ -27,13 +23,11 @@ BigInt :: BigInt(int64_t num)
 
 BigInt :: BigInt(std::string strNum)
 {
-    // проверка на отрицательность
     if (strNum[0] == '-')
     {
         neg = true;
         strNum.erase(0,1);
     }
-    // является ли строка числом
     bool flag = true;
     for (size_t i = 0; i < strNum.length(); i++)
     {
@@ -43,19 +37,16 @@ BigInt :: BigInt(std::string strNum)
     {
         throw "String is not a number";
     }
-    //удаление незначащих нулей спереди
     while ((strNum[0] == '0') && (strNum.length() != 1))
     {
         strNum.erase(0,1);
     }
-    // если остался один 0
     if (strNum == "0")
     {
         neg = false;
     }
     size = strNum.length();
     bigNum = new char [size];
-    // хранение числа в обратносм порядке
     for (size_t i = 0; i < size; i++)
     {
         bigNum[i] = strNum[size - 1 - i];
@@ -71,11 +62,9 @@ BigInt :: BigInt(const BigInt &Num) : size(Num.size), neg(Num.neg)
     }
 }
 
-BigInt :: BigInt(BigInt &&Num) : size(std::move(Num.size)), 
-                                  neg(std::move(Num.neg))
+BigInt :: BigInt(BigInt &&Num) : size(std::move(Num.size)), neg(std::move(Num.neg))
 {
     bigNum = Num.bigNum;
-    // обнуляем перемещённый объект
     Num.bigNum = nullptr;
     Num.size = 0;
     Num.neg = false;
@@ -83,7 +72,6 @@ BigInt :: BigInt(BigInt &&Num) : size(std::move(Num.size)),
 
 BigInt & BigInt :: operator = (const BigInt &Num)
 {
-    // приравнивание самому себе
     if (this == &Num)
     {
         return *this;
@@ -101,7 +89,6 @@ BigInt & BigInt :: operator = (const BigInt &Num)
 
 BigInt & BigInt :: operator = (BigInt &&Num)
 {
-    // приравнивание самому себе
     if (this == &Num)
     {
         return *this;
@@ -110,7 +97,6 @@ BigInt & BigInt :: operator = (BigInt &&Num)
     bigNum = Num.bigNum;
     size = std::move(Num.size);
     neg = std::move(Num.neg);
-    // обнуляем перемещённый объект
     Num.bigNum = nullptr;
     Num.size = 0;
     Num.neg = false;
@@ -125,7 +111,6 @@ BigInt :: ~BigInt()
 BigInt BigInt :: operator - () const
 {
     BigInt Temp = *this;
-    // вернуть такое же число, но с другим знаком, если это не 0
     if (!((size == 1) && (bigNum[0] == '0')))
     {
         Temp.neg = !neg;
@@ -139,24 +124,19 @@ BigInt BigInt :: operator + (const BigInt &Num) const
     {
         if (Num.neg)
         {
-            // отр. + отр.
             return (-((-*this) + (-Num)));
         }
         else
         {
-            // отр. + пол.
             return (-((-*this) - Num));
         }
     }
     else if (Num.neg)
     {
-        // пол. + отр.
         return (*this - (-Num));
     }
     else 
     {
-        // пол. + пол.
-        // сделаем так, чтобы первым шло более длинное число
         if (size < Num.size)
         {
             return (Num + *this);
@@ -164,8 +144,6 @@ BigInt BigInt :: operator + (const BigInt &Num) const
         else
         {
             std::string res;
-            // в эту переменную будем записывать 
-            // доп. слагаемое от предыдущего разряда
             char add = 0;
             for (size_t i = 0; i < Num.size; i++)
             {
@@ -215,34 +193,26 @@ BigInt BigInt :: operator - (const BigInt &Num) const
     {
         if (Num.neg)
         {
-            // отр. - отр.
             return (-((-*this) - (-Num)));
         }
         else
         {
-            // отр. - пол.
             return (-((-*this) + Num));
         }
     }
     else if (Num.neg)
     {
-        // пол. - отр.
         return (*this + (-Num));
     }
     else 
     {
-        // пол. - пол.
         if (*this < Num)
         {
-            // из меньшего большее
             return (-(Num - *this));
         }
         else
         {
-            // из большего меньшее
             std::string res;
-            // в эту переменную будем записывать единицу,
-            // если необходимо занять у следующего разряда
             char add = 0;
             for (size_t i = 0; i < Num.size; i++)
             {
@@ -284,7 +254,6 @@ BigInt BigInt :: operator - (const BigInt &Num) const
 
 void BigInt :: pow_10_n (const size_t n)
 {
-    // умножение на 10^n
     size += n;
     char *newBigNum = new char [size];
     for (size_t i = 0; i < n; i++)
@@ -305,22 +274,17 @@ BigInt BigInt :: operator * (const BigInt &Num) const
     {
         if (Num.neg)
         {
-            // отр. * отр.
             return ((-*this) * (-Num));
         }
         else
         {
-            // отр. * пол.
             return (-((-*this) * Num));
         }
     }
     else if (Num.neg)
     {
-        // пол. * отр.
         return (-(*this * (-Num)));
     }
-    // пол. * пол.
-    // если два обычных числа
     if ((size == 1) && (Num.size == 1))
     {
         BigInt Res((bigNum[0] - '0') * (Num.bigNum[0] - '0'));
@@ -336,8 +300,6 @@ BigInt BigInt :: operator * (const BigInt &Num) const
     {
         num2.insert(num2.begin(), Num.bigNum[i]);
     }
-    // приведение к одинаковой длине кратной 2
-    // добавлением незначащих нулей
     int64_t diff = (size - Num.size);
     size_t len;
     if (diff < 0)
@@ -352,7 +314,6 @@ BigInt BigInt :: operator * (const BigInt &Num) const
         num1.insert(num1.begin(), (size % 2), '0');
         len = size + size % 2;
     }
-    // разбиваем числа на половинки
     BigInt Num11(num1.substr(len/2));
     BigInt Num12(num1.substr(0, len/2));
     BigInt Num21(num2.substr(len/2));
@@ -444,7 +405,6 @@ bool BigInt :: operator >= (const BigInt &Num) const
 }
 
 
-// друг класса
 std::ostream & operator << (std::ostream &ostream, const BigInt &Num)
 {
     if (Num.neg)
