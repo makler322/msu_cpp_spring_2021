@@ -4,6 +4,7 @@
 #include <cassert>
 #include "serializer.hpp"
 
+
 using namespace std;
 
 struct Data
