@@ -62,7 +62,8 @@ BigInt :: BigInt(const BigInt &Num) : size(Num.size), neg(Num.neg)
     }
 }
 
-BigInt :: BigInt(BigInt &&Num) : size(std::move(Num.size)), neg(std::move(Num.neg))
+BigInt :: BigInt(BigInt &&Num) : size(Num.size), neg(Num.neg)
+// BigInt :: BigInt(BigInt &&Num) : size(std::move(Num.size)), neg(std::move(Num.neg))
 {
     bigNum = Num.bigNum;
     Num.bigNum = nullptr;
@@ -96,7 +97,7 @@ BigInt & BigInt :: operator = (BigInt &&Num)
     delete [] bigNum;
     bigNum = Num.bigNum;
     size = std::move(Num.size);
-    neg = std::move(Num.neg);
+    neg = std::move(Num.neg); // from l-value to r-value
     Num.bigNum = nullptr;
     Num.size = 0;
     Num.neg = false;
