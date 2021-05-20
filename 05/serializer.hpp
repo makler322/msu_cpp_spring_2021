@@ -1,6 +1,7 @@
 #include <sstream>
 #pragma once
 
+
 enum class Error
 {
     NoError,
