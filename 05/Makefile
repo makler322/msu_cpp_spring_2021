@@ -1,6 +1,7 @@
 CC=g++
 FLAGS=-std=c++17 -Wall -Werror -fsanitize=address -Wextra
 
+
 all: main.o 
 	$(CC) $(FLAGS) main.o  -o main
 
