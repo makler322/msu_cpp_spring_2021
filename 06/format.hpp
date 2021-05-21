@@ -1,6 +1,7 @@
 #include <sstream>
 #include <iostream>
 #include <string>
+#pragma once
 
 class My_exception 
 {
